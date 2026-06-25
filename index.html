@@ -1,0 +1,309 @@
+from pathlib import Path
+html = r"""<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Tilápias do Produtor</title>
+
+<style>
+:root{
+  --azul:#06264a;
+  --azul2:#083a68;
+  --verde:#16a34a;
+  --verde2:#22c55e;
+  --texto:#0f2746;
+  --claro:#f7fbff;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:Arial,Helvetica,sans-serif;color:var(--texto);background:#fff}
+a{text-decoration:none}
+.container{width:min(1120px,92%);margin:auto}
+
+/* MENU */
+.nav{
+  position:sticky;top:0;z-index:99;background:#fff;
+  box-shadow:0 2px 15px rgba(0,0,0,.08)
+}
+.nav .container{display:flex;align-items:center;justify-content:space-between;height:72px}
+.logo{display:flex;align-items:center;gap:10px;font-weight:900;color:var(--azul);font-size:24px;line-height:20px}
+.logo span{display:block;color:var(--verde);font-size:15px;letter-spacing:.8px}
+.logo-icon{font-size:38px}
+.menu{display:flex;gap:24px;font-weight:700;font-size:14px}
+.menu a{color:var(--azul)}
+.menu a:hover{color:var(--verde)}
+.whats-top{
+  background:var(--verde);color:#fff;padding:13px 22px;border-radius:10px;
+  font-weight:900;display:flex;align-items:center;gap:8px
+}
+
+/* HERO */
+.hero{
+  min-height:540px;
+  background:
+    linear-gradient(90deg,rgba(3,18,44,.88),rgba(3,30,55,.62),rgba(3,30,55,.25)),
+    url("https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=1800&auto=format&fit=crop");
+  background-size:cover;background-position:center;
+  color:#fff;display:flex;align-items:center;position:relative;overflow:hidden
+}
+.hero h1{font-size:58px;line-height:1.05;margin-bottom:20px}
+.hero h1 span{color:#67d779}
+.hero p{font-size:20px;line-height:1.45;max-width:520px;margin-bottom:24px}
+.btns{display:flex;gap:18px;flex-wrap:wrap;margin-bottom:35px}
+.btn{
+  display:inline-flex;align-items:center;gap:8px;padding:16px 28px;border-radius:999px;
+  font-weight:900;transition:.25s
+}
+.btn-green{background:var(--verde);color:#fff}
+.btn-green:hover{background:#0f8f3d;transform:translateY(-2px)}
+.btn-outline{border:2px solid #fff;color:#fff}
+.btn-outline:hover{background:#fff;color:var(--azul)}
+.hero-badges{display:flex;gap:44px;flex-wrap:wrap;font-weight:700}
+.hero-badges div{display:flex;align-items:center;gap:10px}
+.hero-badges b{display:block}
+.hero-badges span{font-size:13px;color:#e5f5e9}
+.seal{
+  position:absolute;right:8%;bottom:65px;width:150px;height:150px;border:3px solid #fff;
+  border-radius:50%;display:flex;align-items:center;justify-content:center;text-align:center;
+  font-weight:900;color:#fff;background:rgba(4,32,62,.45)
+}
+
+/* SECTIONS */
+section{padding:62px 0}
+.eyebrow{color:var(--verde);font-weight:900;font-size:12px;letter-spacing:1.6px;text-transform:uppercase}
+h2{font-size:34px;line-height:1.1;color:var(--azul);margin:8px 0 18px}
+h2 span{color:var(--verde)}
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center}
+.about p{font-size:17px;line-height:1.55;color:#344563;margin-bottom:22px}
+.about-img{
+  min-height:280px;border-radius:18px;
+  background:url("https://images.unsplash.com/photo-1500382017468-9049fed747ef?q=80&w=1200&auto=format&fit=crop") center/cover;
+  box-shadow:0 12px 35px rgba(0,0,0,.14)
+}
+.icons{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin:25px 0}
+.icon-item{font-size:13px;font-weight:800;color:var(--azul)}
+.icon-item i{display:block;font-size:28px;color:var(--verde);margin-bottom:8px}
+
+/* PRODUTOS */
+.center{text-align:center}
+.products{display:grid;grid-template-columns:repeat(4,1fr);gap:22px;margin-top:22px}
+.card{
+  background:#fff;border-radius:15px;overflow:hidden;box-shadow:0 10px 28px rgba(0,0,0,.1);
+  border:1px solid #e6eef7;transition:.25s
+}
+.card:hover{transform:translateY(-6px)}
+.card-img{height:160px;background-size:cover;background-position:center}
+.card-content{padding:20px}
+.card h3{color:var(--azul);font-size:21px;margin-bottom:10px}
+.card p{font-size:15px;color:#41536b;line-height:1.45;min-height:64px}
+.card .btn{padding:11px 18px;margin-top:15px;font-size:14px;width:100%;justify-content:center}
+
+/* VANTAGENS */
+.advantages{
+  background:#f4f8fc;border-radius:18px;padding:26px;margin-top:35px;
+  display:grid;grid-template-columns:repeat(6,1fr);gap:15px;text-align:center
+}
+.adv{font-weight:800;font-size:13px;color:var(--azul)}
+.adv i{display:block;font-size:30px;color:var(--verde);margin-bottom:8px}
+
+/* COMO FUNCIONA */
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:25px;margin-top:28px}
+.step{display:flex;gap:14px;align-items:flex-start}
+.num{background:var(--verde);color:#fff;width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:900;flex:0 0 34px}
+.step h3{font-size:18px;color:var(--azul);margin-bottom:7px}
+.step p{font-size:14px;color:#52627a}
+
+/* GALERIA */
+.gallery-wrap{background:#f8fbff;border-top:1px solid #d9e5f2;border-bottom:1px solid #d9e5f2}
+.gallery{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-top:22px}
+.gallery div{height:130px;border-radius:12px;background-size:cover;background-position:center}
+
+/* RODAPE */
+footer{background:#031f3e;color:#fff;padding:42px 0 25px}
+.footer-grid{display:grid;grid-template-columns:1.1fr 1fr 1.5fr 1fr;gap:35px}
+footer h3{font-size:17px;margin-bottom:14px}
+footer p,footer a{color:#dbeafe;font-size:14px;line-height:1.7}
+.copyright{text-align:center;margin-top:32px;color:#b8c7d9;font-size:13px}
+.float{
+  position:fixed;right:24px;bottom:24px;background:#25D366;color:#fff;
+  width:64px;height:64px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  font-size:31px;box-shadow:0 12px 30px rgba(0,0,0,.28);z-index:100
+}
+
+@media(max-width:900px){
+  .menu{display:none}
+  .hero h1{font-size:42px}
+  .about-grid,.products,.advantages,.steps,.footer-grid{grid-template-columns:1fr}
+  .icons{grid-template-columns:repeat(2,1fr)}
+  .gallery{grid-template-columns:1fr 1fr}
+  .seal{display:none}
+}
+</style>
+</head>
+
+<body>
+
+<nav class="nav">
+  <div class="container">
+    <div class="logo"><div class="logo-icon">🐟</div><div>TILÁPIAS<span>DO PRODUTOR</span></div></div>
+    <div class="menu">
+      <a href="#inicio">Início</a>
+      <a href="#quem-somos">Quem Somos</a>
+      <a href="#produtos">Produtos</a>
+      <a href="#vantagens">Vantagens</a>
+      <a href="#galeria">Galeria</a>
+      <a href="#contato">Contato</a>
+    </div>
+    <a class="whats-top" href="https://wa.me/557491086407?text=Olá!%20Gostaria%20de%20um%20orçamento%20de%20tilápias." target="_blank">📲 74 9108-6407</a>
+  </div>
+</nav>
+
+<header class="hero" id="inicio">
+  <div class="container">
+    <h1>Tilápias Frescas<br><span>Direto do Produtor</span></h1>
+    <p>Tilápias selecionadas, criadas com qualidade, água limpa e alimentação controlada. Venda para restaurantes, mercados e consumidores finais.</p>
+    <div class="btns">
+      <a class="btn btn-green" href="https://wa.me/557491086407?text=Olá!%20Gostaria%20de%20um%20orçamento%20de%20tilápias." target="_blank">📲 Solicitar orçamento</a>
+      <a class="btn btn-outline" href="#produtos">Conheça nossos produtos ›</a>
+    </div>
+    <div class="hero-badges">
+      <div>🐟 <span><b>Produção própria</b>com qualidade</span></div>
+      <div>✅ <span><b>Peixe fresco</b>todos os dias</span></div>
+      <div>🎧 <span><b>Atendimento</b>rápido e confiável</span></div>
+    </div>
+  </div>
+  <div class="seal">QUALIDADE<br>QUE VOCÊ<br>PROVA</div>
+</header>
+
+<section class="about" id="quem-somos">
+  <div class="container about-grid">
+    <div>
+      <div class="eyebrow">Quem Somos</div>
+      <h2>Paixão por criar,<br>compromisso com a <span>qualidade.</span></h2>
+      <p>Somos uma piscicultura especializada na criação de tilápias de alta qualidade. Nosso compromisso é oferecer um peixe saudável, fresco e produzido com responsabilidade, garantindo sabor, qualidade e confiança aos nossos clientes.</p>
+      <div class="icons">
+        <div class="icon-item"><i>💧</i>Água limpa<br>e de qualidade</div>
+        <div class="icon-item"><i>🥣</i>Alimentação<br>balanceada</div>
+        <div class="icon-item"><i>♻️</i>Produção<br>sustentável</div>
+        <div class="icon-item"><i>🐟</i>Peixe<br>saudável</div>
+      </div>
+      <a class="btn btn-green" href="#contato">Saiba mais sobre nós ›</a>
+    </div>
+    <div class="about-img"></div>
+  </div>
+</section>
+
+<section id="produtos">
+  <div class="container">
+    <div class="center">
+      <div class="eyebrow">Nossos Produtos</div>
+      <h2>Tilápias para <span>todas as necessidades</span></h2>
+    </div>
+
+    <div class="products">
+      <div class="card">
+        <div class="card-img" style="background-image:url('https://images.unsplash.com/photo-1544943910-4c1dc44aab44?q=80&w=900&auto=format&fit=crop')"></div>
+        <div class="card-content">
+          <h3>Tilápia Inteira</h3>
+          <p>Peixe inteiro, fresco e selecionado, ideal para diversas receitas.</p>
+          <a class="btn btn-green" target="_blank" href="https://wa.me/557491086407?text=Olá!%20Tenho%20interesse%20em%20tilápia%20inteira.">Solicitar orçamento</a>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-img" style="background-image:url('https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?q=80&w=900&auto=format&fit=crop')"></div>
+        <div class="card-content">
+          <h3>Filé de Tilápia</h3>
+          <p>Filés limpos e prontos para o preparo das suas receitas.</p>
+          <a class="btn btn-green" target="_blank" href="https://wa.me/557491086407?text=Olá!%20Tenho%20interesse%20em%20filé%20de%20tilápia.">Solicitar orçamento</a>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-img" style="background-image:url('https://images.unsplash.com/photo-1565680018434-b513d5e5fd47?q=80&w=900&auto=format&fit=crop')"></div>
+        <div class="card-content">
+          <h3>Tilápia Eviscerada</h3>
+          <p>Pronta para preparo, com mais praticidade e higiene.</p>
+          <a class="btn btn-green" target="_blank" href="https://wa.me/557491086407?text=Olá!%20Tenho%20interesse%20em%20tilápia%20eviscerada.">Solicitar orçamento</a>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-img" style="background-image:url('https://images.unsplash.com/photo-1522069169874-c58ec4b76be5?q=80&w=900&auto=format&fit=crop')"></div>
+        <div class="card-content">
+          <h3>Tilápias Vivas</h3>
+          <p>Peixes vivos e saudáveis, ideais para pesqueiros e repovoamento.</p>
+          <a class="btn btn-green" target="_blank" href="https://wa.me/557491086407?text=Olá!%20Tenho%20interesse%20em%20tilápias%20vivas.">Solicitar orçamento</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="advantages" id="vantagens">
+      <div class="adv"><i>💧</i>Água de qualidade</div>
+      <div class="adv"><i>🥣</i>Alimentação balanceada</div>
+      <div class="adv"><i>🐟</i>Produção própria</div>
+      <div class="adv"><i>✅</i>Peixe sempre fresco</div>
+      <div class="adv"><i>🎧</i>Atendimento rápido</div>
+      <div class="adv"><i>🛒</i>Venda no atacado e varejo</div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container center">
+    <div class="eyebrow">Como funciona</div>
+    <div class="steps">
+      <div class="step"><div class="num">1</div><div><h3>Você faz o pedido</h3><p>Entre em contato e faça seu pedido.</p></div></div>
+      <div class="step"><div class="num">2</div><div><h3>Separamos os peixes</h3><p>Selecionamos os melhores peixes para você.</p></div></div>
+      <div class="step"><div class="num">3</div><div><h3>Agendamos a entrega</h3><p>Combinamos o melhor dia e horário.</p></div></div>
+      <div class="step"><div class="num">4</div><div><h3>Você recebe tudo fresco</h3><p>Peixes frescos, com qualidade e segurança.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="gallery-wrap" id="galeria">
+  <div class="container center">
+    <div class="eyebrow">Galeria</div>
+    <div class="gallery">
+      <div style="background-image:url('https://images.unsplash.com/photo-1500382017468-9049fed747ef?q=80&w=900&auto=format&fit=crop')"></div>
+      <div style="background-image:url('https://images.unsplash.com/photo-1522069169874-c58ec4b76be5?q=80&w=900&auto=format&fit=crop')"></div>
+      <div style="background-image:url('https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=900&auto=format&fit=crop')"></div>
+      <div style="background-image:url('https://images.unsplash.com/photo-1544943910-4c1dc44aab44?q=80&w=900&auto=format&fit=crop')"></div>
+      <div style="background-image:url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=900&auto=format&fit=crop')"></div>
+    </div>
+    <a class="btn btn-green" href="https://wa.me/557491086407?text=Olá!%20Quero%20ver%20mais%20fotos%20das%20tilápias." target="_blank">🖼️ Ver mais fotos ›</a>
+  </div>
+</section>
+
+<footer id="contato">
+  <div class="container footer-grid">
+    <div>
+      <div class="logo" style="color:#fff"><div class="logo-icon">🐟</div><div>TILÁPIAS<span>DO PRODUTOR</span></div></div>
+      <p>Tilápias frescas, criadas com qualidade e responsabilidade para levar o melhor para sua mesa.</p>
+    </div>
+    <div>
+      <h3>Contato</h3>
+      <p>📲 74 9108-6407</p>
+      <p>✉️ contato@tilapiasdoprodutor.com.br</p>
+    </div>
+    <div>
+      <h3>Endereço</h3>
+      <p>📍 R. Miguel Calmom - Tomaz Guimarães<br>Sr. do Bonfim - BA, 48970-000</p>
+    </div>
+    <div>
+      <h3>Horário de Atendimento</h3>
+      <p>🕒 Segunda a Sábado<br>07h às 18h</p>
+    </div>
+  </div>
+  <div class="copyright">© 2024 Tilápias do Produtor. Todos os direitos reservados.</div>
+</footer>
+
+<a class="float" href="https://wa.me/557491086407?text=Olá!%20Gostaria%20de%20comprar%20tilápias." target="_blank">💬</a>
+
+</body>
+</html>
+"""
+path = "/mnt/data/index_tilapias_mockup.html"
+Path(path).write_text(html, encoding="utf-8")
+print(path)
